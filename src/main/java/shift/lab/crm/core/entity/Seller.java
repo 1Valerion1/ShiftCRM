@@ -1,5 +1,6 @@
 package shift.lab.crm.core.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,11 +31,11 @@ public class Seller {
     private String name;
     @Column(name = "contact_info")
     private String contactInfo;
-    @Column(name = "registration_date")
-    @CreationTimestamp()
+    @Column(name = "registration_date", updatable = false)
+    @CreationTimestamp
     private LocalDateTime registrationDate;
 
-    @OneToMany
-    @Column()
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column
     private Set<Transaction> transactions;
 }

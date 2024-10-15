@@ -30,8 +30,7 @@ public class SellerHistory {
     private String name;
     @Column(name = "contact_info")
     private String contactInfo;
-    @Column(name = "registration_date")
-    @CreationTimestamp
+    @Column(name = "registration_date",updatable = false)
     private LocalDateTime registrationDate;
     @Enumerated(EnumType.STRING)
     private Operation operation;

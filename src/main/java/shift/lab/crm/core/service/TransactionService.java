@@ -11,7 +11,7 @@ import shift.lab.crm.core.entity.Transaction;
 import java.util.List;
 
 public interface TransactionService {
-    TransactionResponseDto create(TransactionCreateDto transactionCreateDto);
+    TransactionResponseDto create(TransactionCreateDto transactionCreateDto,Long sellerId);
 
     List<TransactionResponseDto> listAllTransaction();
 

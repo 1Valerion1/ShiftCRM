@@ -13,6 +13,7 @@ public interface SellerService {
 
     SellerResponseDto infoSeller(Long id);
 
+
     SellerResponseDto update(SellerUpdateDto sellerUpdateDto);
 
     void deleteSeller(Long id);

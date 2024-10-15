@@ -24,8 +24,8 @@ public class TransactionController {
 
     @PostMapping
     @Operation(description = "Создает транзакцию")
-    public TransactionResponseDto create(@RequestBody TransactionCreateDto createDto) {
-        return transactionService.create(createDto);
+    public TransactionResponseDto create(@RequestParam Long sellerId,@RequestBody TransactionCreateDto createDto) {
+        return transactionService.create(createDto,sellerId);
     }
 
     @GetMapping("/all")

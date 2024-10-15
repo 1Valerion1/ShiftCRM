@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +47,7 @@ public class SellerController {
         return sellerService.create(sellerCreatetDto);
     }
 
-    @PatchMapping
+    @PutMapping
     @Operation(description = "Обновляем информацию о продавце(name или contactInfo) ")
     public SellerResponseDto updateSeller(@RequestBody SellerUpdateDto sellerUpdateDto) {
         return sellerService.update(sellerUpdateDto);
