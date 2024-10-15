@@ -10,12 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import shift.lab.crm.core.entity.enums.Operation;
-import shift.lab.crm.core.entity.enums.Payment;
 
 import java.time.LocalDateTime;
+
 @Builder
 @Data
 @Entity
@@ -32,7 +31,7 @@ public class TransactionHistory {
     private Long amount;
     @Column(name = "payment_type")
     private String paymentType;
-    @Column(name = "transaction_date",updatable = false)
+    @Column(name = "transaction_date", updatable = false)
     private LocalDateTime transactionDate;
     @Enumerated(EnumType.STRING)
     private Operation operation;

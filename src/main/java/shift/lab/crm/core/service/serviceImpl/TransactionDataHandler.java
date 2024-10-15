@@ -1,6 +1,7 @@
 package shift.lab.crm.core.service.serviceImpl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import shift.lab.crm.api.Dto.SellerPeakTransactionDto;
 import shift.lab.crm.api.Dto.TopSellerDto;
 import shift.lab.crm.core.entity.Seller;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class TransactionDataHandler {
     private final TransactionRepository transactionRepository;
