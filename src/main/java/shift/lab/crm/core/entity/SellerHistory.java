@@ -8,9 +8,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 import shift.lab.crm.core.entity.enums.Operation;
 
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "seller_history")
 public class SellerHistory {
     @Id
@@ -30,7 +33,7 @@ public class SellerHistory {
     private String name;
     @Column(name = "contact_info")
     private String contactInfo;
-    @Column(name = "registration_date",updatable = false)
+    @Column(name = "registration_date", updatable = false)
     private LocalDateTime registrationDate;
     @Enumerated(EnumType.STRING)
     private Operation operation;

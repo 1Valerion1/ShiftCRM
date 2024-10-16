@@ -6,12 +6,15 @@ import shift.lab.crm.core.entity.Seller;
 import shift.lab.crm.core.entity.SellerHistory;
 import shift.lab.crm.core.entity.enums.Operation;
 import shift.lab.crm.core.repository.SellerHistoryRepository;
+import shift.lab.crm.core.service.SellerHistoryService;
 
-@RequiredArgsConstructor
 @Service
-public class SellerHistoryService {
+@RequiredArgsConstructor
+public class SellerHistoryServiceImpl implements SellerHistoryService {
+
     private final SellerHistoryRepository sellerHistoryRepository;
 
+    @Override
     public void recordHistory(Seller seller, Operation operation) {
         SellerHistory sellerHistory = SellerHistory.builder()
                 .sellerId(seller.getId())

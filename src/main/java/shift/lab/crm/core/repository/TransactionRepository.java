@@ -11,17 +11,17 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    @Query("SELECT t.seller.id, SUM(t.amount) as totalSales " +
+    @Query("SELECT t.seller, SUM(t.amount) as totalSales " +
             "FROM Transaction t " +
             "WHERE t.transactionDate BETWEEN :startDate AND :endDate " +
-            "GROUP BY t.seller.id " +
+            "GROUP BY t.seller " +
             "ORDER BY totalSales DESC")
     List<Object[]> findTopSeller(LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query("SELECT t.seller.id, SUM(t.amount) as totalSales " +
+    @Query("SELECT t.seller, SUM(t.amount) as totalSales " +
             "FROM Transaction t " +
             "WHERE t.transactionDate BETWEEN :startDate AND :endDate " +
-            "GROUP BY t.seller.id " +
+            "GROUP BY t.seller " +
             "HAVING SUM(t.amount) < :sumMin")
     List<Object[]> findSellerMin(LocalDateTime startDate, LocalDateTime endDate, Long sumMin);
 

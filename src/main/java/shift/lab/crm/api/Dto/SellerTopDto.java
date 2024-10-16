@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 @Schema(description = "Выводится информация о продавце и сумме его продаж")
-public record TopSellerDto(
+public record SellerTopDto(
         @Schema(description = "Id в системе", example = "1")
         Long id,
         @Pattern(regexp = "^[А-Я][а-я]{0,20}$")

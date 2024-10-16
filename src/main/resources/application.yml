@@ -26,3 +26,11 @@ spring:
       - db.migration
     default-schema: crm
 
+logging:
+  level:
+    shift.lab.crm: debug
+  file.name: logs/app.log
+  pattern:
+    console: "%d [%t] %-5level %logger{36} - %msg%n"
+    file: "%d [%t] %-5level %logger{36} - %msg%n"
+
