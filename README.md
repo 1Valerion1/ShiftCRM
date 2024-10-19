@@ -156,7 +156,6 @@ API не требует аутентификации.
 
 #### Сборка и запуск Docker с использованием IntelliJ IDEA
 
-**Сборка Docker-образа и запуск docker-compose в IntelliJ IDEA**:
    - Откройте проект в IntelliJ IDEA.
    - Найдите файл `Dockerfile` в структуре проекта.
    - Кликните правой кнопкой мыши на файл `Dockerfile` и нажмите `Run on Build`.
