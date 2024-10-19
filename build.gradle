@@ -72,8 +72,8 @@ jar {
 
 flyway {
     url = 'jdbc:postgresql://localhost:5430/crm'
-    user = 'postgres'
-    password = 'postgres'
+    user = 'crm'
+    password = 'crm'
     schemas = ['crm']
     locations = ['filesystem:src/main/resources/db.migration']
 }

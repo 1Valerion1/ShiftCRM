@@ -9,13 +9,10 @@ springdoc:
 spring:
   profiles:
     active: default
-
   datasource:
-    # для запуска в docker поменят на 5430
-    # для локального на 5432
     url: jdbc:postgresql://localhost:5430/crm
-    username: postgres
-    password: postgres
+    username: crm
+    password: crm
     driverClassName: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
