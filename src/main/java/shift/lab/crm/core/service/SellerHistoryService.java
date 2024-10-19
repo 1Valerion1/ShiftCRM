@@ -1,5 +1,6 @@
 package shift.lab.crm.core.service;
 
+import shift.lab.crm.api.Dto.SellerUpdateDto;
 import shift.lab.crm.core.entity.Seller;
 import shift.lab.crm.core.entity.enums.Operation;
 

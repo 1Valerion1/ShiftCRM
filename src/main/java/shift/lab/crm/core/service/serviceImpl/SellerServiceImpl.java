@@ -6,9 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shift.lab.crm.api.Dto.SellerCreatetDto;
 import shift.lab.crm.api.Dto.SellerResponseDto;
+import shift.lab.crm.api.Dto.SellerResponseUpdateDto;
 import shift.lab.crm.api.Dto.SellerUpdateDto;
 import shift.lab.crm.core.entity.Seller;
+import shift.lab.crm.core.entity.SellerHistory;
+import shift.lab.crm.core.entity.TransactionHistory;
 import shift.lab.crm.core.entity.enums.Operation;
+import shift.lab.crm.core.exception.BadRequestException;
 import shift.lab.crm.core.exception.NotFoundException;
 import shift.lab.crm.core.mapper.SellerMapper;
 import shift.lab.crm.core.repository.SellerRepository;
@@ -24,10 +28,13 @@ public class SellerServiceImpl implements SellerService {
     private final SellerRepository sellerRepository;
     private final SellerMapper sellerMapper;
     private final SellerHistoryService sellerHistoryService;
+    private final SellerValidator sellerValidator;
 
     @Override
     public SellerResponseDto create(SellerCreatetDto sellerCreatetDto) {
         log.info("Creating seller with name: {}", sellerCreatetDto.name());
+
+        sellerValidator.validateUniqueness(sellerCreatetDto);
 
         Seller seller = Seller.builder()
                 .name(sellerCreatetDto.name())
@@ -42,7 +49,6 @@ public class SellerServiceImpl implements SellerService {
 
     }
 
-
     @Override
     public List<SellerResponseDto> listAllSeller() {
         log.info("Retrieving all sellers");
@@ -54,38 +60,41 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public SellerResponseDto infoSeller(Long id) {
         log.info("Retrieving seller with ID: {}", id);
-        Seller seller = getSellerById(id);
+        Seller seller = findSellerById(id);
         return sellerMapper.map(seller);
     }
 
-    @Override
     @Transactional
-    public SellerResponseDto update(SellerUpdateDto sellerUp) {
-        log.info("Updating seller with ID: {}", sellerUp.id());
-        Seller seller = getSellerById(sellerUp.id());
+    @Override
+    public SellerResponseUpdateDto update(SellerUpdateDto sellerUpdateDto) {
+        log.info("Updating seller with ID: {}", sellerUpdateDto.id());
 
-        if (sellerUp.name() != null) {
-            seller.setName(sellerUp.name());
-            log.debug("Updated seller name to: {}", sellerUp.name());
-        }
-        if (sellerUp.contactInfo() != null) {
-            seller.setContactInfo(sellerUp.contactInfo());
-            log.debug("Updated seller contactInfo to: {}", sellerUp.contactInfo());
-        }
+        sellerValidator.validateExistence(sellerUpdateDto.id());
 
-        Seller savedSeller = sellerRepository.save(seller);
-        sellerHistoryService.recordHistory(savedSeller, Operation.UPDATE);
-        log.info("Seller with ID: {} updated successfully", savedSeller.getId());
+        updateSellerData(sellerUpdateDto);
 
-        return sellerMapper.map(savedSeller);
+        Seller sellerUpdate = sellerRepository.getReferenceById(sellerUpdateDto.id());
+        sellerHistoryService.recordHistory(sellerUpdate, Operation.UPDATE);
+        log.info("Seller with ID: {} updated successfully", sellerUpdateDto.id());
+
+        return sellerMapper.map(sellerUpdateDto);
     }
 
-    public Seller getSellerById(Long id) {
-        if (id == null) {
-            log.error("Seller ID is null");
-            throw new NotFoundException("Seller with ID " + id + " does not exist");
-        }
 
+    private void updateSellerData(SellerUpdateDto sellerUpdateDto) {
+        if (sellerUpdateDto.name() != null && sellerUpdateDto.contactInfo() != null) {
+            sellerRepository.updateSellerNameAndContactInfo(sellerUpdateDto.id(), sellerUpdateDto.name(), sellerUpdateDto.contactInfo());
+        } else if (sellerUpdateDto.name() != null) {
+            sellerRepository.updateSellerName(sellerUpdateDto.id(), sellerUpdateDto.name());
+        } else if (sellerUpdateDto.contactInfo() != null) {
+            sellerRepository.updateSellerContactInfo(sellerUpdateDto.id(), sellerUpdateDto.contactInfo());
+        } else {
+            throw new BadRequestException("You need to pass at least one field for updating.");
+        }
+    }
+
+    @Override
+    public Seller findSellerById(Long id) {
         return sellerRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Seller with ID: {} not found", id);
@@ -97,9 +106,11 @@ public class SellerServiceImpl implements SellerService {
     @Transactional
     public void deleteSeller(Long id) {
         log.info("Attempting to delete seller with ID: {}", id);
-        Seller seller = getSellerById(id);
+        Seller seller = findSellerById(id);
         sellerRepository.deleteById(id);
         sellerHistoryService.recordHistory(seller, Operation.DELETE);
         log.info("Seller with ID: {} deleted successfully", id);
     }
+
+
 }

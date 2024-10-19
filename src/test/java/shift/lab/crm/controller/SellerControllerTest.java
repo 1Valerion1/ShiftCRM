@@ -7,15 +7,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import shift.lab.crm.api.Dto.SellerCreatetDto;
 import shift.lab.crm.api.Dto.SellerResponseDto;
+import shift.lab.crm.api.Dto.SellerResponseUpdateDto;
 import shift.lab.crm.api.Dto.SellerUpdateDto;
 import shift.lab.crm.api.controller.SellerController;
+import shift.lab.crm.core.exception.NotFoundException;
 import shift.lab.crm.core.service.SellerService;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -51,7 +54,12 @@ public class SellerControllerTest {
 
     @Test
     void testGetInfoOneSellerSuccess() {
-        SellerResponseDto seller = new SellerResponseDto(1L, "Voody", "+79234567890", LocalDateTime.now());
+        SellerResponseDto seller = new SellerResponseDto(
+                1L,
+                "Voody",
+                "+79234567890",
+                LocalDateTime.of(2024, 10, 14, 00, 00, 0)
+        );
 
         when(sellerService.infoSeller(1L)).thenReturn(seller);
 
@@ -61,13 +69,19 @@ public class SellerControllerTest {
 
         assertEquals("Voody", result.name());
         assertEquals("+79234567890", result.contactInfo());
+        assertEquals(LocalDateTime.of(2024, 10, 14, 00, 00, 0), result.registrationDate());
+
     }
 
     @Test
     void testCreateSellerSuccess() {
         SellerCreatetDto createDto = new SellerCreatetDto("Voody", "+79234567890");
-        SellerResponseDto createdSeller = new SellerResponseDto(1L, "Voody", "+79234567890", LocalDateTime.now());
-
+        SellerResponseDto createdSeller = new SellerResponseDto(
+                1L,
+                "Voody",
+                "+79234567890",
+                LocalDateTime.of(2024, 10, 14, 00, 00, 0)
+        );
         when(sellerService.create(createDto)).thenReturn(createdSeller);
 
         SellerResponseDto result = sellerController.createSeller(createDto);
@@ -76,16 +90,20 @@ public class SellerControllerTest {
 
         assertEquals("Voody", result.name());
         assertEquals("+79234567890", result.contactInfo());
+        assertEquals(LocalDateTime.of(2024, 10, 14, 00, 00, 0), result.registrationDate());
     }
 
     @Test
     void testUpdateSellerSuccess() {
         SellerUpdateDto updateDto = new SellerUpdateDto(1L, "VadimUp", "+79234567891");
-        SellerResponseDto updatedSeller = new SellerResponseDto(1L, "VadimUp", "+79234567891", LocalDateTime.now());
+        SellerResponseUpdateDto updatedSeller = new SellerResponseUpdateDto(
+                1L,
+                "VadimUp",
+                "+79234567891");
 
         when(sellerService.update(updateDto)).thenReturn(updatedSeller);
 
-        SellerResponseDto result = sellerController.updateSeller(updateDto);
+        SellerResponseUpdateDto result = sellerController.updateSeller(updateDto);
 
         verify(sellerService, times(1)).update(updateDto);
 
@@ -103,5 +121,21 @@ public class SellerControllerTest {
 
         verify(sellerService, times(1)).deleteSeller(sellerId);
     }
+
+
+    @Test
+    void testGetInfoOneSellerNotFound() {
+        Long nonExistentSellerId = 999L;
+
+        when(sellerService.infoSeller(nonExistentSellerId)).thenThrow(new NotFoundException("Seller not found"));
+
+        Exception exception = assertThrows(NotFoundException.class, () -> {
+            sellerController.getInfoOneSeller(nonExistentSellerId);
+        });
+
+        assertEquals("Seller not found", exception.getMessage());
+        verify(sellerService, times(1)).infoSeller(nonExistentSellerId);
+    }
+
 
 }

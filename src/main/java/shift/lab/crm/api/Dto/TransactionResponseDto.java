@@ -9,9 +9,9 @@ import jakarta.validation.constraints.Pattern;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-
+@Schema(description = "Выводится информация о транзакции")
 public record TransactionResponseDto(
-        @NotEmpty
+        @NotNull
         @Schema(example = "1")
         Long id,
         @NotEmpty
@@ -21,14 +21,12 @@ public record TransactionResponseDto(
         @Pattern(regexp = "^[a-zA-Z]{4,8}$", message = "должен содержать от 4 до 8 английских букв CASH, TRANSFER ")
         @Schema(example = "CASH")
         String paymentType,
-        @NotEmpty
+        @NotNull
         @Min(value = 100, message = "amount должен быть положительным числом больше 100 ")
         @Schema(example = "100")
         Long amount,
         @NotNull
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         LocalDateTime transactionDate
-
-
 ) {
 }

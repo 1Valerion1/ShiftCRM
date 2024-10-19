@@ -7,12 +7,18 @@ springdoc:
   show-login-endpoint: true
 
 spring:
+  profiles:
+    active: default
+
   datasource:
+    # для запуска в docker поменят на 5430
+    # для локального на 5432
     url: jdbc:postgresql://localhost:5432/crm
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
       ddl-auto: none

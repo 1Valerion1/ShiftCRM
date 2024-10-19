@@ -1,8 +1,11 @@
 package shift.lab.crm.api.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,17 +18,19 @@ import shift.lab.crm.core.service.TransactionService;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/transaction")
-@Tag(name = "TransactionController",description = "Операции над транзакциями")
+@RequiredArgsConstructor
+@Tag(name = "TransactionController", description = "Операции над транзакциями")
 public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping
     @Operation(description = "Создает транзакцию")
-    public TransactionResponseDto create(@RequestParam Long sellerId,@RequestBody TransactionCreateDto createDto) {
-        return transactionService.create(createDto,sellerId);
+    public TransactionResponseDto create(@Schema(example = "1")
+                                         @RequestParam @Min(value = 1) Long sellerId,
+                                         @Validated @RequestBody TransactionCreateDto createDto) {
+        return transactionService.create(createDto, sellerId);
     }
 
     @GetMapping("/all")
@@ -36,13 +41,13 @@ public class TransactionController {
 
     @GetMapping("/all/{seller_id}")
     @Operation(description = "Получаем список всех транзакций конткретного продавца")
-    public List<TransactionResponseDto> getListTransactionSelller(@RequestParam Long seller_id) {
+    public List<TransactionResponseDto> getListTransactionSelller(@Schema(example = "1") @RequestParam @Min(value = 1) Long seller_id) {
         return transactionService.listAllTransactionSeller(seller_id);
     }
 
     @GetMapping("/{trans_id}")
     @Operation(description = "Получаем 1 конкретную транзакцию")
-    public TransactionResponseDto getTransaction(@RequestParam Long trans_id) {
+    public TransactionResponseDto getTransaction(@Schema(example = "1") @RequestParam @Min(value = 1) Long trans_id) {
         return transactionService.infoTransaction(trans_id);
     }
 

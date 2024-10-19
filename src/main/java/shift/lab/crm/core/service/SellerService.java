@@ -2,6 +2,7 @@ package shift.lab.crm.core.service;
 
 import shift.lab.crm.api.Dto.SellerCreatetDto;
 import shift.lab.crm.api.Dto.SellerResponseDto;
+import shift.lab.crm.api.Dto.SellerResponseUpdateDto;
 import shift.lab.crm.api.Dto.SellerUpdateDto;
 import shift.lab.crm.core.entity.Seller;
 
@@ -15,11 +16,11 @@ public interface SellerService {
     SellerResponseDto infoSeller(Long id);
 
 
-    SellerResponseDto update(SellerUpdateDto sellerUpdateDto);
+    SellerResponseUpdateDto update(SellerUpdateDto sellerUpdateDto);
 
     void deleteSeller(Long id);
 
-    Seller getSellerById(Long id);
+    Seller findSellerById(Long id);
 
 
 }

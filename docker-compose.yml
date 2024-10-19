@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  postgres:
+    container_name: postgresDB
+    image: postgres:12
+    hostname: database
+    volumes:
+      - ./postgres:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_DB=crm
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5430:5432"
+  webapi:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    hostname: service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/crm
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: curl http://localhost:8081 || exit 0
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 10s
+volumes:
+  prom_data:

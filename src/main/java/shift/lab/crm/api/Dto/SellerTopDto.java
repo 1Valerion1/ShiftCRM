@@ -1,25 +1,23 @@
 package shift.lab.crm.api.Dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-
-import java.time.LocalDateTime;
 
 @Schema(description = "Выводится информация о продавце и сумме его продаж")
 public record SellerTopDto(
         @Schema(description = "Id в системе", example = "1")
+        @Min(value = 1)
         Long id,
-        @Pattern(regexp = "^[А-Я][а-я]{0,20}$")
+        @Pattern(regexp = "^[a-zA-ZА-Яа-я0-9]{0,20}$")
         @Schema(description = "Имя продавца", example = "Voody")
         String name,
-        @Pattern(regexp = "^(\\+7\\d{10}|[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,})$")
+        @Pattern(regexp = "^(\\+7\\d{10}|[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z0-9]{2,50})$")
         @Schema(description = "Контактная информация (телефон или адрес электронной почты)",
                 example = "+79234567890 или user@example.com")
         String contactInfo,
-        @Schema(description = "Дата регистрации", example = "2022-12-12 12:23:23")
-        LocalDateTime registrationDate,
-        @NotEmpty
+        @NotNull
         @Schema(description = "Сумма топового продавца", example = "12000")
         Long sumAmount
 ) {

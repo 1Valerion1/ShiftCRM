@@ -34,7 +34,6 @@ public class Seller {
     @Column(name = "registration_date", updatable = false)
     @CreationTimestamp
     private LocalDateTime registrationDate;
-
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column
     private Set<Transaction> transactions;

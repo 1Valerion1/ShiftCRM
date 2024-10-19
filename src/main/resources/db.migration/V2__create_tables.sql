@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS seller_history (
     id BIGSERIAL PRIMARY KEY NOT NULL,
     seller_id BIGINT,
     name VARCHAR(20),
-    contact_info VARCHAR(20),
+    contact_info VARCHAR(50),
     registration_date TIMESTAMP,
     operation VARCHAR(6),
     change_data TIMESTAMP

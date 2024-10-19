@@ -27,12 +27,11 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionMapper transactionMapper;
     private final SellerService sellerService;
 
-    // Проверку на наличие телефона или почты
     @Override
     public TransactionResponseDto create(TransactionCreateDto transactionCreateDto, Long sellerId) {
         log.info("Attempting to create transaction for sellerId: {}", sellerId);
 
-        Seller seller = sellerService.getSellerById(sellerId);
+        Seller seller = sellerService.findSellerById(sellerId);
 
         Transaction transaction = Transaction.builder()
                 .seller(seller)

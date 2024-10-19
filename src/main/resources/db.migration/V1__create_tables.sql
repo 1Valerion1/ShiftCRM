@@ -4,7 +4,7 @@ create schema if not exists crm;
 create table if not exists seller (
       id bigserial PRIMARY KEY NOT NULL,
       name varchar(20),
-      contact_info varchar(20),
+      contact_info varchar(50),
       registration_date timestamp
 );
 
